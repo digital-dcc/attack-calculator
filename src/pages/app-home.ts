@@ -50,6 +50,9 @@ export class AppHome extends LitElement {
   @property({ state: true, attribute: false })
   diceRollResult = '';
 
+  @property({ state: true, attribute: false })
+  drawerLabel = '';
+
   static styles = [
     styles,
     css`
@@ -61,6 +64,9 @@ export class AppHome extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 20px;
+      }
+      sl-drawer {
+        --size: 200px;
       }
     `,
   ];
@@ -119,7 +125,6 @@ export class AppHome extends LitElement {
     let resultDisplay = rolls
       .map((r) => `<span class="die-result">${r}</span>`)
       .join(` + `);
-    console.log(resultDisplay);
     if (roll.mod > 0) {
       resultDisplay += ` + ${roll.mod}`;
     } else if (roll.mod < 0) {
@@ -135,17 +140,13 @@ export class AppHome extends LitElement {
     }
 
     this.diceRollResult = html`
-      <h2>${name}</h2>
-      <p>${description}</p>
+      <p style="margin-top: -20px;">${description}</p>
       <div><strong>Roll</strong> ${unsafeHTML(rollDisplay)}</div>
       <div><strong>Result</strong> ${unsafeHTML(resultDisplay)}</div>
-      ${fumble
-        ? html`<div><strong>Fumble!</strong></div>`
-        : html``}
-      ${crit
-        ? html`<div><strong>Crit!</strong></div>`
-        : html``}
+      ${fumble ? html`<div><strong>Fumble!</strong></div>` : html``}
+      ${crit ? html`<div><strong>Crit!</strong></div>` : html``}
     `;
+    this.drawerLabel = name;
     drawer.show();
   }
 
@@ -178,7 +179,11 @@ export class AppHome extends LitElement {
             ></equipped-weapon>`
           )}</weapons-panel
         >
-        <sl-drawer placement="bottom" class="drawer-placement-bottom">
+        <sl-drawer
+          label="${this.drawerLabel}"
+          placement="bottom"
+          class="drawer-placement-bottom"
+        >
           ${this.diceRollResult}
         </sl-drawer>
       </main>
