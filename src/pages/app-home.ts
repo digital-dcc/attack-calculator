@@ -25,6 +25,7 @@ function rollDice(numDice, sides, modifier) {
   };
 }
 
+import '../components/die-display';
 import '@shoelace-style/shoelace/dist/components/drawer/drawer.js';
 import '@shoelace-style/shoelace/dist/components/dropdown/dropdown.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
@@ -66,7 +67,13 @@ export class AppHome extends LitElement {
         gap: 20px;
       }
       sl-drawer {
-        --size: 200px;
+        --size: 300px;
+      }
+      .roll-results {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
       }
     `,
   ];
@@ -140,11 +147,16 @@ export class AppHome extends LitElement {
     }
 
     this.diceRollResult = html`
-      <p style="margin-top: -20px;">${description}</p>
-      <div><strong>Roll</strong> ${unsafeHTML(rollDisplay)}</div>
-      <div><strong>Result</strong> ${unsafeHTML(resultDisplay)}</div>
-      ${fumble ? html`<div><strong>Fumble!</strong></div>` : html``}
-      ${crit ? html`<div><strong>Crit!</strong></div>` : html``}
+      <div class="roll-results">
+        <div>
+          <p>${description}</p>
+          <div><strong>Roll</strong> ${unsafeHTML(rollDisplay)}</div>
+          <div><strong>Result</strong> ${unsafeHTML(resultDisplay)}</div>
+          ${fumble ? html`<div><strong>Fumble!</strong></div>` : html``}
+          ${crit ? html`<div><strong>Crit!</strong></div>` : html``}
+        </div>
+        <die-display number="${total}"></die-display>
+      </div>
     `;
     this.drawerLabel = name;
     drawer.show();
