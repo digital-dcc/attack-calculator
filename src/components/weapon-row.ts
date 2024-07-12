@@ -2,7 +2,7 @@ import { LitElement, css, html } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
 
 import { setBasePath } from '@shoelace-style/shoelace';
-setBasePath('../../node_modules/@shoelace-style/shoelace/dist');
+setBasePath("https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.14.0/cdn/");
 
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/icon/icon.js';
