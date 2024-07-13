@@ -5,6 +5,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { property, customElement } from 'lit/decorators.js';
 // @ts-ignore
 import { weapons } from '../../data/weapons';
+import { birthAugurs } from '../../data/birth-augurs';
 // import { resolveRouterPath } from '../router';
 
 // Function to roll a single die with a specified number of sides
@@ -59,6 +60,9 @@ export class AppHome extends LitElement {
 
   @property({ state: true, attribute: false })
   drawerLabel = '';
+
+  @property({ state: true, attribute: false })
+  birthAugur = '';
 
   static styles = [
     styles,
@@ -124,6 +128,22 @@ export class AppHome extends LitElement {
       <sl-button slot="trigger" caret>Select Weapons</sl-button>
       <sl-menu> ${items} </sl-menu>
     </sl-dropdown>`;
+  }
+
+  get birthAugurMenu() {
+    const items = Array.from(birthAugurs.entries()).map(([key, augur]) => {
+      return html`<sl-menu-item value="${key}">${augur}</sl-menu-item>`;
+    });
+    return html` <sl-dropdown>
+        <sl-button slot="trigger" caret>Birth Augur</sl-button>
+        <sl-menu @sl-select="${this.birthAugurSelected}">
+          ${items}
+        </sl-menu> </sl-dropdown
+      >${this.birthAugur}`;
+  }
+
+  birthAugurSelected(event) {
+    this.birthAugur = event.detail.item.value;
   }
 
   attributeChange(event: any) {
@@ -203,7 +223,7 @@ export class AppHome extends LitElement {
           min="3"
           max="18"
         ></sl-range>
-        ${this.weaponsMenu}
+        ${this.weaponsMenu} ${this.birthAugurMenu}
         <weapons-panel
           >${this.addedWeaponsList.map(
             (weapon) => html`<equipped-weapon
@@ -212,6 +232,7 @@ export class AppHome extends LitElement {
               agility="${this.agility}"
               luck="${this.luck}"
               ?lucky="${this.luckyWeapon === weapon}"
+              birth-augur="${this.birthAugur}"
               @dice-roll="${this.diceRoll}"
             ></equipped-weapon>`
           )}</weapons-panel
