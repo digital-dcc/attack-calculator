@@ -6,18 +6,26 @@ setBasePath(
   'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.14.0/cdn/'
 );
 
+// import '@shoelace-style/shoelace/dist/components/checkbox/checkbox.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+
 @customElement('weapon-row')
 export class WeaponRow extends LitElement {
   @property({ type: String }) name = '';
   @property({ type: Number }) number = 0;
+  @property({ type: Boolean }) lucky = false;
 
   static styles = css`
     .item {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+    }
+    input[type='checkbox'] {
+      /* Ensure no custom styles are interfering */
+      appearance: auto;
+      -webkit-appearance: checkbox; /* For Safari */
     }
   `;
 
@@ -44,6 +52,14 @@ export class WeaponRow extends LitElement {
     );
   }
 
+  luckyWeaponSelected(event: any) {
+    this.dispatchEvent(
+      new CustomEvent('lucky-change', {
+        detail: { name: event.target.value, checked: event.target.checked },
+      })
+    );
+  }
+
   render() {
     return html`
       <sl-menu-item>
@@ -52,6 +68,15 @@ export class WeaponRow extends LitElement {
             ${this.name} ${this.number !== 0 ? html`(${this.number})` : html``}
           </div>
           <div class="buttons">
+            <label>
+              <input
+                type="checkbox"
+                name="lucky-weapon"
+                .checked="${this.lucky}"
+                value="${this.name}"
+                @change="${this.luckyWeaponSelected}"
+              />Lucky
+            </label>
             <sl-button @click="${this.decrement}">
               <sl-icon name="dash-circle"></sl-icon>
             </sl-button>

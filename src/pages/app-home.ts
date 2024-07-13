@@ -45,6 +45,12 @@ export class AppHome extends LitElement {
   @property({ type: Number })
   agility: number = 3;
 
+  @property({ type: Number })
+  luck: number = 3;
+
+  @property({ state: true, attribute: false })
+  luckyWeapon: string = null;
+
   @property({ state: true, attribute: false })
   addedWeaponsList = [];
 
@@ -96,10 +102,20 @@ export class AppHome extends LitElement {
     this.addedWeaponsList = [...this.addedWeaponsList];
   }
 
+  luckyChange(event) {
+    if (event.detail.checked) {
+      this.luckyWeapon = event.detail.name;
+    } else {
+      this.luckyWeapon = null;
+    }
+  }
+
   get weaponsMenu() {
     const items = Array.from(weapons.entries()).map(([key, weapon]) => {
       return html`<weapon-row
         name="${key}"
+        ?lucky="${this.luckyWeapon === key}"
+        @lucky-change="${this.luckyChange}"
         @decrement-weapon="${this.decrementWeapon}"
         @increment-weapon="${this.incrementWeapon}"
       ></weapon-row>`;
@@ -180,6 +196,13 @@ export class AppHome extends LitElement {
           min="3"
           max="18"
         ></sl-range>
+        <sl-range
+          @sl-change="${this.attributeChange}"
+          help-text="Set character luck (3-18)"
+          label="Luck (${this.luck})"
+          min="3"
+          max="18"
+        ></sl-range>
         ${this.weaponsMenu}
         <weapons-panel
           >${this.addedWeaponsList.map(
@@ -187,6 +210,8 @@ export class AppHome extends LitElement {
               .weapon="${weapon}"
               strength="${this.strength}"
               agility="${this.agility}"
+              luck="${this.luck}"
+              ?lucky="${this.luckyWeapon === weapon}"
               @dice-roll="${this.diceRoll}"
             ></equipped-weapon>`
           )}</weapons-panel

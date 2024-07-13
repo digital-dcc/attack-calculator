@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@digital-dcc/equipped-weapon": "^1.0.4",
+    "@digital-dcc/equipped-weapon": "^1.0.5",
     "@digital-dcc/weapons-panel": "^1.0.2",
     "@shoelace-style/shoelace": "^2.15.0",
     "@thepassle/app-tools": "^0.9.12",
@@ -41,3 +41,4 @@
     "bracketSpacing": true
   }
 }
+
